@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>سایت‌های من</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1a1d21;--mu:#6b7280;--ac:#2563eb;--bd:#e3e6ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--card:#1b1e23;--tx:#eceef1;--mu:#98a0ab;--ac:#5b8cff;--bd:#2b3038}}
+:root[data-theme="dark"]{--bg:#111316;--card:#1b1e23;--tx:#eceef1;--mu:#98a0ab;--ac:#5b8cff;--bd:#2b3038}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma,Vazirmatn,system-ui,sans-serif;font-size:15px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 10px 6px;z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.row{display:flex;gap:8px}
+input,textarea,select{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;width:100%}
+button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;cursor:pointer}
+button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
+.chips button{white-space:nowrap;border-radius:99px;padding:5px 12px;font-size:13px}
+.chips button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:6px 10px 80px}
+.s{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:9px;text-decoration:none;color:var(--tx);min-width:0;position:relative}
+.s:active{transform:scale(.97)}
+.ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px}
+.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.ed{position:absolute;top:2px;left:2px;display:flex;gap:2px}
+.ed span{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:0 6px;font-size:13px}
+.empty{text-align:center;color:var(--mu);padding:40px 10px}
+.dlg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.dlg.o{display:flex}
+.box{background:var(--bg);width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:14px;display:grid;gap:8px;max-height:90%;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.mu{color:var(--mu);font-size:12px;line-height:1.7}
+.fab{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:14px;width:54px;height:54px;border-radius:50%;font-size:28px;padding:0;box-shadow:0 4px 14px #0004}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="row">
+    <input id="q" type="search" placeholder="جستجو… (Enter = باز کردن اولی)" autocomplete="off">
+    <button id="bEd" title="ویرایش">✎</button>
+    <button id="bDb" title="پشتیبان">⇅</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+<div class="grid" id="grid"></div>
+<button class="fab p" id="bAdd">+</button>
+
+<div class="dlg" id="dAdd"><div class="box">
+  <b id="tAdd">افزودن سایت</b>
+  <input id="fN" placeholder="نام">
+  <input id="fU" placeholder="آدرس (مثلاً digikala.com)" dir="ltr" inputmode="url">
+  <input id="fC" placeholder="دسته (اختیاری)" list="cl">
+  <datalist id="cl"></datalist>
+  <div class="row"><button class="p" id="fS" style="flex:1">ذخیره</button><button id="fX">بستن</button></div>
+  <div class="mu">افزودن گروهی: از «⇅» استفاده کنید.</div>
+</div></div>
+
+<div class="dlg" id="dDb"><div class="box">
+  <b>پشتیبان‌گیری / افزودن گروهی</b>
+  <div class="mu">هر خط یک سایت: <span dir="ltr">نام | آدرس | دسته</span> (دسته اختیاری). برای انتقال بین گوشی و کامپیوتر: «کپی» را بزنید، در دستگاه دیگر بچسبانید و «افزودن» را بزنید.</div>
+  <textarea id="tx" rows="9" dir="ltr" placeholder="دیجی‌کالا | digikala.com | خرید"></textarea>
+  <div class="row"><button id="cp" style="flex:1">کپی همه</button><button class="p" id="im" style="flex:1">افزودن از متن</button></div>
+  <button id="sd">بارگذاری لیست اولیه (بدون تکرار)</button>
+  <div class="row"><button id="th" style="flex:1">تغییر تم</button><button id="dX" style="flex:1">بستن</button></div>
+</div></div>
+
+<script>
+(function(){
+var KEY="sites_v1",sites=[],cat="همه",editing=false,editId=null,qs="";
+function $(i){return document.getElementById(i)}
+function load(){try{sites=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){sites=[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(sites))}catch(e){}}
+function norm(u){u=u.trim();if(!u)return"";return/^https?:\/\//i.test(u)?u:"https://"+u}
+function col(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return"hsl("+h+",55%,45%)"}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function cats(){var m={};sites.forEach(function(s){if(s.c)m[s.c]=1});return Object.keys(m)}
+function list(){var t=qs.toLowerCase();return sites.filter(function(s){
+  if(cat!=="همه"&&s.c!==cat)return false;
+  return!t||(s.n+" "+s.u+" "+(s.c||"")).toLowerCase().indexOf(t)>-1})}
+function render(){
+  var cs=["همه"].concat(cats());
+  $("chips").innerHTML=cs.map(function(c){return'<button data-c="'+esc(c)+'"'+(c===cat?' class="on"':'')+'>'+esc(c)+'</button>'}).join("");
+  $("cl").innerHTML=cats().map(function(c){return'<option value="'+esc(c)+'">'}).join("");
+  var l=list();
+  $("grid").innerHTML=l.length?l.map(function(s){
+    return'<a class="s" href="'+esc(s.u)+'" target="_blank" rel="noopener" data-id="'+s.i+'"><span class="ic" style="background:'+col(s.n)+'">'+esc(s.n.charAt(0)||"?")+'</span><span class="nm">'+esc(s.n)+'</span>'+(editing?'<span class="ed"><span data-e="'+s.i+'">✎</span><span data-d="'+s.i+'">✕</span></span>':'')+'</a>'}).join("")
+    :'<div class="empty" style="grid-column:1/-1">'+(sites.length?'چیزی پیدا نشد':'هنوز سایتی اضافه نشده.<br>دکمه + یا ⇅ را بزنید.')+'</div>';
+  $("bEd").className=editing?"p":"";
+}
+function open(id){$(id).classList.add("o")}
+function close(id){$(id).classList.remove("o")}
+function showAdd(s){editId=s?s.i:null;$("tAdd").textContent=s?"ویرایش سایت":"افزودن سایت";
+  $("fN").value=s?s.n:"";$("fU").value=s?s.u:"";$("fC").value=s?(s.c||""):(cat!=="همه"?cat:"");open("dAdd");$("fN").focus()}
+$("q").oninput=function(){qs=this.value;render()};
+$("q").onkeydown=function(e){if(e.key==="Enter"){var l=list();if(l[0])window.open(l[0].u,"_blank","noopener")}};
+$("chips").onclick=function(e){var c=e.target.getAttribute("data-c");if(c!==null){cat=c;render()}};
+$("bEd").onclick=function(){editing=!editing;render()};
+$("bAdd").onclick=function(){showAdd()};
+$("fX").onclick=function(){close("dAdd")};
+$("fS").onclick=function(){
+  var n=$("fN").value.trim(),u=norm($("fU").value),c=$("fC").value.trim();
+  if(!u)return;if(!n)n=u.replace(/^https?:\/\/(www\.)?/,"").split("/")[0];
+  if(editId){sites.forEach(function(s){if(s.i===editId){s.n=n;s.u=u;s.c=c}})}
+  else sites.push({i:Date.now()+Math.random().toString(36).slice(2,6),n:n,u:u,c:c});
+  save();close("dAdd");render()};
+$("grid").onclick=function(e){
+  var t=e.target,d=t.getAttribute("data-d"),ed=t.getAttribute("data-e");
+  if(d){e.preventDefault();if(confirm("حذف شود؟")){sites=sites.filter(function(s){return s.i!==d});save();render()}}
+  else if(ed){e.preventDefault();showAdd(sites.filter(function(s){return s.i===ed})[0])}
+  else if(editing){e.preventDefault()}};
+$("bDb").onclick=function(){open("dDb")};
+$("dX").onclick=function(){close("dDb")};
+$("cp").onclick=function(){
+  var t=sites.map(function(s){return s.n+" | "+s.u+(s.c?" | "+s.c:"")}).join("\n");
+  $("tx").value=t;$("tx").select();
+  try{navigator.clipboard.writeText(t)}catch(e){try{document.execCommand("copy")}catch(_){}}};
+$("im").onclick=function(){
+  var n=0;$("tx").value.split(/\r?\n/).forEach(function(l){
+    var p=l.split("|").map(function(x){return x.trim()});
+    if(p.length===1&&p[0]){p=[p[0].replace(/^https?:\/\/(www\.)?/,"").split("/")[0],p[0],""]}
+    if(p.length>=2&&p[1]){var u=norm(p[1]);
+      if(!sites.some(function(s){return s.u===u})){sites.push({i:Date.now()+Math.random().toString(36).slice(2,6)+n,n:p[0]||u,u:u,c:p[2]||""});n++}}});
+  save();render();$("tx").value="";alert(n+" سایت اضافه شد")};
+$("th").onclick=function(){var r=document.documentElement,
+  dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
+  r.setAttribute("data-theme",dark?"light":"dark")};
+var SEED=[
+"ابلاغیه ۱|iehraz.adliran.ir/Login|قضایی و انتظامی","ابلاغیه ۲|iehraz2.adliran.ir/Login|قضایی و انتظامی","سخا|sakha.epolice.ir/portal/login|قضایی و انتظامی","نوبت‌دهی مستقیم|numbering.epolice.ir/numberingnew/#/numbering-reserve-0|قضایی و انتظامی","مالیات نقل و انتقال|etax.ir|خودرو","عوارض شهرداری|portalsaamie.upto.ir/?ReturnUrl=%2FCar%2FRegiesterCar|خودرو","سکوی وصول دیون خودرو|serwis.ir/toll/login|خودرو","بارز تایر|shop.barez.org|خودرو","کویر تایر|kavirtire.ir/esale|خودرو","ایران‌خودرو|ikcosales.ir|خودرو","بهمن موتور|bahman.iranecar.com|خودرو","سایپا|saipa.iranecar.com/public/home|خودرو","نتایج قرعه‌کشی بهمن موتور|bahman.iranecar.com/winners|خودرو","کارت سوخت|fcs.niopdc.ir|خودرو","مرخصی تاکسی|pfto-khoy.ir/morekhasi|خودرو","احراز نشانی کدپستی|ehraz.post.ir|پست و کدپستی","کدپستی نقشه|gnaf.post.ir/portal/#postcodeFinder|پست و کدپستی","یافتن و تاییدیه کدپستی|gnaf2.post.ir/#5/31.77/54.82|پست و کدپستی","صاپست|avs.sapost.ir/login|پست و کدپستی","قبضینو|ghabzino.com|خدمات عمومی","آیتول|itoll.com|خدمات عمومی","خودنویس|khodnevis.mrud.ir|خدمات عمومی","ثبت احوال|ncr.ir|ثبت احوال","سهیم ثبت احوال|sahim.sabteahval.ir|ثبت احوال","اتاق اصناف ایران|irguilds.ir/panel/#/auth/login|خدمات عمومی","سامانه مجوزها|g4b.ir|خدمات عمومی","فنی و حرفه‌ای|portaltvto.com|آموزش","سماح|samah.haj.ir|خدمات عمومی","نساجی خوی|my.khoy.co/employment|خدمات عمومی","وام ازدواج و فرزندآوری|ve.cbi.ir/Default.aspx|بانک و وام","وام بسیج|ebsvam.ir/Pages/GetMeli.aspx|بانک و وام","استعلام چک صیادی|cbi.ir|بانک و وام","رتبه‌بندی اعتباری|ics24.ir|بانک و وام","سجام|www.sejam.ir|بانک و وام","سهام عدالت|sahamedalat.ir|بانک و وام","کد شهاب کشاورزی|bki.ir/shahab|بانک و وام","صیاد پاسارگاد|vbank.bpi.ir|صیاد","صیاد مهر ایران|gov.qmb.ir/Sayad|صیاد","صیاد توسعه تعاون|vb.ttbank.ir|صیاد","صیاد رسالت|vbank.rqb.ir|صیاد","صیاد رفاه کارگران|sayad.refah-bank.ir|صیاد","صیاد ملی|sayad.bmi.ir|صیاد","صیاد کشاورزی|ib.bki.ir/pid162.lmx|صیاد","اینترنت بانک تجارت|ib.tejaratbank.ir/web/ns/login?execution=e1s1|بانک و وام","اینترنت بانک ملت|ebanking.bankmellat.ir/ebanking/#/|بانک و وام","بیمه ورزشی|insurance.ifsm.ir/UserOnline/Login|بیمه و بازنشستگی","استعلام بیمه‌نامه|centinsur.ir|بیمه و بازنشستگی","صندوق بازنشستگی کشوری|eservices.cspf.ir/Auth-api|بیمه و بازنشستگی","تامین اجتماعی (سابقه/فیش/حکم)|es.tamin.ir/view/#/main|بیمه و بازنشستگی","فیش بیمه کاغذی تامین|samt.tamin.ir/portal/login|بیمه و بازنشستگی","فیش بازنشسته نظامی|saba.esata.ir:7090/authentication/login|بیمه و بازنشستگی","سامانه حمایت|hemayat.mcls.gov.ir|حمایتی","سیمین (شبا خانوار)|simin.hadafmandi.ir/login|حمایتی","شما / شمیم|hemayat.sfara.ir|حمایتی","مسکن ملی|saman.mrud.ir|مسکن","املاک و اسکان|amlak.mrud.ir|مسکن","مای مدیو|my.medu.ir|آموزش","کنکور|my.sanjesh.org/login|آموزش","کتاب درسی|irtextbook.ir|آموزش","نمونه سوالات قلم‌چی|www.kanoon.ir/Public/ExamQuestions|آموزش","طب۲۰|teb20.net|آموزش","myf2m|myf2m.info|فیلم و سریال","serialblog|serialblog.blog.ir|فیلم و سریال","filmaz|filmaz.ir|فیلم و سریال","movie-chi (اشتراکی)|movie-chi.ir|فیلم و سریال","filmjoo|filmjoo.xyz|فیلم و سریال","filmkio (اشتراکی)|filmkio.run|فیلم و سریال","دنیای سریال|dls2.iran-gamecenter-host.com/DonyayeSerial|فیلم و سریال","simbaapp (نیمه‌اشتراکی)|simbaapp.ir|فیلم و سریال","movielix (اشتراکی)|movielix.ir|فیلم و سریال","Kiamovie (نیمه‌اشتراکی)|Kiamovie.ir|فیلم و سریال","f2mc|f2mc.top|فیلم و سریال","serialblog.net|serialblog.net|فیلم و سریال","movieyaab|movieyaab.ir|فیلم و سریال","subkade|subkade.ir|زیرنویس","subzone|subzone.ir|زیرنویس","3fa|3fa.ir|زیرنویس","فرازین|faraazin.ir|ترجمه و دیکشنری","آبادیس|abadis.ir|ترجمه و دیکشنری","fastdic|fastdic.com|ترجمه و دیکشنری","b-amooz|dic.b-amooz.com|ترجمه و دیکشنری","نشان|neshan.org|نقشه","بلد|balad.ir|نقشه","boofai|chat.boofai.com|هوش مصنوعی","هوشیار|hooshyar.golrang.ai|هوش مصنوعی","smartbytes|chat.smartbytes.ir|هوش مصنوعی","زرین‌بین|zarebin.ir|جستجو","گردو|gerdoo.me|جستجو","شادبین|shaadbin.ir|جستجو","2059|2059.ir|جستجو","bazion|bazion.ir|نرم‌افزار و بازی","soft98|soft98.ir|نرم‌افزار و بازی","yasdl|yasdl.com|نرم‌افزار و بازی","farsroid|farsroid.com|نرم‌افزار و بازی","vgdl|vgdl.ir|نرم‌افزار و بازی","par30games|par30games.net|نرم‌افزار و بازی","gameq|gameq.ir|نرم‌افزار و بازی","کافه‌بازار|cafebazaar.ir|نرم‌افزار و بازی","مایکت|myket.ir|نرم‌افزار و بازی","downloadha|downloadha.com|نرم‌افزار و بازی","download.ir|download.ir|نرم‌افزار و بازی","patoghu|patoghu.com|نرم‌افزار و بازی","gold-team|gold-team.org|نرم‌افزار و بازی","bosgame|bosgame.ir|نرم‌افزار و بازی","pirategames|pirategames.ir|نرم‌افزار و بازی","sarzamindownload|sarzamindownload.com|نرم‌افزار و بازی","dlfox|dlfox.com|نرم‌افزار و بازی","فیدیبو|fidibo.com|کتاب","طاقچه|taaghche.com|کتاب","نوار|navaar.ir|کتاب","libra-books|libra-books.com|کتاب","ebooksworld|ebooksworld.ir|کتاب","radio 9craft|radio.9craft.ir|موزیک","melovaz|melovaz.ir|موزیک","behmelody|behmelody.in|موزیک"
+].join("\n");
+function addText(t){var n=0;t.split(/\r?\n/).forEach(function(l){var p=l.split("|").map(function(x){return x.trim()});
+  if(p.length>=2&&p[1]){var u=norm(p[1]);if(!sites.some(function(s){return s.u===u})){sites.push({i:Date.now()+Math.random().toString(36).slice(2,6)+n,n:p[0]||u,u:u,c:p[2]||""});n++}}});return n}
+$("sd").onclick=function(){var n=addText(SEED);save();render();alert(n+" سایت اضافه شد")};
+if("serviceWorker"in navigator){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
+load();
+try{if(!sites.length&&!localStorage.getItem("seeded_v1")){addText(SEED);save();localStorage.setItem("seeded_v1","1")}}catch(e){}
+render();
+})();
+</script>
+</body>
+</html>
