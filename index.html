@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#2563eb">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>سایت‌های من</title>
+<title>کافینت خوی</title>
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--tx:#1a1d21;--mu:#6b7280;--ac:#2563eb;--bd:#e3e6ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111316;--card:#1b1e23;--tx:#eceef1;--mu:#98a0ab;--ac:#5b8cff;--bd:#2b3038}}
@@ -24,6 +24,13 @@ button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
 .chips button{white-space:nowrap;border-radius:99px;padding:5px 12px;font-size:13px}
 .chips button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.brand{text-align:center;padding-bottom:6px}.brand img{max-height:46px;max-width:70%}
+.cat{width:100%;margin-top:8px;text-align:right;font-weight:700}
+.pcat{display:none;position:absolute;right:10px;left:10px;max-height:60vh;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;margin-top:4px;box-shadow:0 8px 24px #0003;z-index:30}
+.pcat.o{display:block}
+.pcat button{display:flex;justify-content:space-between;width:100%;border:0;border-bottom:1px solid var(--bd);border-radius:0;text-align:right;padding:12px}
+.pcat button.on{color:var(--ac);font-weight:700}
+@media(min-width:700px){.pcat{left:auto;width:340px}}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:6px 10px 80px}
 .s{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:9px;text-decoration:none;color:var(--tx);min-width:0;position:relative}
 .s:active{transform:scale(.97)}
@@ -41,12 +48,13 @@ button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
 </head>
 <body>
 <div class="top">
+  <div class="brand"><img src="logo.png" alt="" onerror="this.parentNode.style.display='none'"></div>
   <div class="row">
     <input id="q" type="search" placeholder="جستجو… (Enter = باز کردن اولی)" autocomplete="off">
     <button id="bEd" title="ویرایش">✎</button>
     <button id="bDb" title="پشتیبان">⇅</button>
   </div>
-  <div class="chips" id="chips"></div>
+  <button id="bCat" class="cat">☰ دسته‌ها: همه</button><div id="pCat" class="pcat"></div>
 </div>
 <div class="grid" id="grid"></div>
 <button class="fab p" id="bAdd">+</button>
@@ -85,7 +93,8 @@ function list(){var t=qs.toLowerCase();return sites.filter(function(s){
   return!t||(s.n+" "+s.u+" "+(s.c||"")).toLowerCase().indexOf(t)>-1})}
 function render(){
   var cs=["همه"].concat(cats());
-  $("chips").innerHTML=cs.map(function(c){return'<button data-c="'+esc(c)+'"'+(c===cat?' class="on"':'')+'>'+esc(c)+'</button>'}).join("");
+  $("pCat").innerHTML=cs.map(function(c){var n=c==="همه"?sites.length:sites.filter(function(s){return s.c===c}).length;return'<button data-c="'+esc(c)+'"'+(c===cat?' class="on"':'')+'><span>'+esc(c)+'</span><span class="mu">'+n+'</span></button>'}).join("");
+  $("bCat").textContent="☰ دسته‌ها: "+cat;
   $("cl").innerHTML=cats().map(function(c){return'<option value="'+esc(c)+'">'}).join("");
   var l=list();
   $("grid").innerHTML=l.length?l.map(function(s){
@@ -99,7 +108,9 @@ function showAdd(s){editId=s?s.i:null;$("tAdd").textContent=s?"ویرایش سا
   $("fN").value=s?s.n:"";$("fU").value=s?s.u:"";$("fC").value=s?(s.c||""):(cat!=="همه"?cat:"");open("dAdd");$("fN").focus()}
 $("q").oninput=function(){qs=this.value;render()};
 $("q").onkeydown=function(e){if(e.key==="Enter"){var l=list();if(l[0])window.open(l[0].u,"_blank","noopener")}};
-$("chips").onclick=function(e){var c=e.target.getAttribute("data-c");if(c!==null){cat=c;render()}};
+$("bCat").onclick=function(e){e.stopPropagation();$("pCat").classList.toggle("o")};
+$("pCat").onclick=function(e){var b=e.target.closest("button");if(b){cat=b.getAttribute("data-c");$("pCat").classList.remove("o");render()}};
+document.addEventListener("click",function(e){if(!$("pCat").contains(e.target))$("pCat").classList.remove("o")});
 $("bEd").onclick=function(){editing=!editing;render()};
 $("bAdd").onclick=function(){showAdd()};
 $("fX").onclick=function(){close("dAdd")};
